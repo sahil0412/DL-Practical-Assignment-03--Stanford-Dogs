@@ -1,4 +1,4 @@
-# Deep-Learning-Emotion Detection
+# Deep-Learning-Stanford Dogs Breed Prediction
 
 ### create a virtual env
 conda create -n DL_Stanford python=3.10
