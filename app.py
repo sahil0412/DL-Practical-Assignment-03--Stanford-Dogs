@@ -6,7 +6,7 @@ from tensorflow.keras.preprocessing.image import img_to_array, load_img
 import cv2
 import numpy as np
 import json
-
+# from tensorflow.keras.models import model_from_json
 app = Flask(__name__)
 
 # Define the static and upload directories
@@ -17,9 +17,9 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Load the deep learning model
-model = tf.keras.models.load_model(r'models\Best_DenseNet121.h5', compile=False)
-
-# Emotion labels
+# model = tf.keras.models.load_model(r'models\Best_DenseNet121.h5', compile=False)
+model = tf.keras.models.load_model(r'models\tf15gpu_EfficientNetB0_model_StanfordDogsDataset.h5', compile=False)
+# model = tf.keras.layers.TFSMLayer("models\test", call_endpoint="serving_default")
 with open(r'models\class_indices.json', 'r') as f:
     class_indices = json.load(f)
 class_names = {v: k for k, v in class_indices.items()}
@@ -32,7 +32,7 @@ def load_and_preprocess_image(img_path, target_size=(224, 224)):
     img = load_img(img_path, target_size=target_size)
     img_array = img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
-    img_array /= 255.0  # Assuming the model was trained with images rescaled to [0, 1]
+    iimg_array = tf.keras.applications.efficientnet.preprocess_input(img_array)
     return img_array
 
 def predict_image(model, img_array):
